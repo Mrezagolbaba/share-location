@@ -1,10 +1,11 @@
 import { connect } from "react-redux";
 import { addNewPlace as addNewPlaceAction, setPlaceFormVisibility } from "src/utils/actions";
 import { IState, Place } from "src/utils/types";
+import { Field, Formik, Form as FormikForm,useFormik, FormikConfig } from "formik";
 import Modal from 'react-modal';
 import {LatLng, LatLngExpression} from "leaflet";
 import "./styles.css";
-import {MapContainer, Marker, TileLayer,} from "react-leaflet";
+import {MapContainer, Marker, TileLayer, Tooltip} from "react-leaflet";
 import AddMarker from "../map/addMarker";
 import Camera from '../../assets/camera.png'
 import React, {FormEvent, FormEventHandler, useState} from "react";
@@ -16,7 +17,7 @@ const Form = ({isVisible, position, closeForm, addNewPlace}: {
     addNewPlace: Function;
 }) => {
     const [type,setType] = useState("Business")
-    const [logo,setLogo] = useState("")
+    const [logo,setLogo] = React.useState("")
     const [name,setName] = useState("")
 
     const uploadFile = function (e: React.ChangeEvent<HTMLInputElement>) {
@@ -32,6 +33,11 @@ const Form = ({isVisible, position, closeForm, addNewPlace}: {
             logo:logo,
             position:[position?.lat, position?.lng]
         });
+        setType('')
+        setName('')
+        setLogo('')
+        closeForm()
+
     }
 
     return (
@@ -48,6 +54,7 @@ const Form = ({isVisible, position, closeForm, addNewPlace}: {
                     <span className="form__header__title">Share Location</span>
                 </div>
                 <form onSubmit={handleOnSubmit}>
+
                     <div className="formGroup">
                         <div className="formGroupInput">
                             <label htmlFor="title">Location Name</label>
@@ -129,6 +136,7 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         closeForm: () =>
             dispatch(setPlaceFormVisibility(false)),
+
         addNewPlace: (place: Place) => {
             dispatch(addNewPlaceAction(place))
         }
