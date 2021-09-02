@@ -1,0 +1,10 @@
+.map__container {
+    width: 100vw;
+}
+.popup__container{
+    width: 300px;
+}
+.popup__name{
+    color: black;
+    font-size: 16px;
+}
